@@ -1,7 +1,6 @@
 package dev.lampirg.creature;
 
 import dev.lampirg.dice.DiceThrower;
-import dev.lampirg.dice.UnboundedDiceThrower;
 import lombok.*;
 
 @Getter
@@ -20,6 +19,7 @@ public abstract class Creature {
     private DamageRange damageRange;
 
     public Creature(int maxHealth, int defense, int attack, int lowestDamage, int highestDamage, DiceThrower diceThrower) {
+        validateArguments(maxHealth, defense, attack);
         health = new Health(maxHealth, maxHealth);
         isAlive = true;
         this.defense = defense;
@@ -27,6 +27,18 @@ public abstract class Creature {
         damageRange = new DamageRange(lowestDamage, highestDamage);
         // TODO: replace hardcode with DI
         this.diceThrower = diceThrower;
+    }
+
+    private void validateArguments(int maxHealth, int defense, int attack) {
+        if (maxHealth <= 0) {
+            throw new IllegalArgumentException("Max Health's argument is " + maxHealth + " but must be greater than zero");
+        }
+        if (defense < 1 || defense > 30) {
+            throw new IllegalArgumentException("Defense argument is " + defense + " but must be in range of 1 and 30");
+        }
+        if (attack < 1 || attack > 30) {
+            throw new IllegalArgumentException("Attack argument is " + attack + " but must be in range of 1 and 30");
+        }
     }
 
     public int getMaxHealth() {
@@ -39,6 +51,9 @@ public abstract class Creature {
 
     public void setMaxHealth(int newMaxHealth) {
         health.maxHealth = newMaxHealth;
+        if (getCurrentHealth() > getMaxHealth()) {
+            health.currentHealth = health.maxHealth;
+        }
     }
 
     public void setCurrentHealth(int newCurrentHealth) {
@@ -89,9 +104,15 @@ public abstract class Creature {
     }
 
     @Data
-    @AllArgsConstructor
     public static class DamageRange {
         private int from;
         private int to;
+
+        public DamageRange(int from, int to) {
+            if (from > to)
+                throw new IllegalArgumentException("Argument from is greater than to");
+            this.from = from;
+            this.to = to;
+        }
     }
 }

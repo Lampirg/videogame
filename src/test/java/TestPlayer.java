@@ -91,4 +91,14 @@ public class TestPlayer {
         Assertions.assertEquals(0, player.getRemainHeals());
         Assertions.assertThrows(IllegalStateException.class, () -> player.heal());
     }
+
+    @Test
+    void testIllegalArguments() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Player(-1, 1, 1, 1, 4, diceThrower));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Player(6, 0, 1, 1, 4, diceThrower));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Player(6, 35, 1, 1, 4, diceThrower));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Player(6, 1, -5, 1, 4, diceThrower));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Player(6, 1, 875, 1, 4, diceThrower));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Player(6, 1, 1, 7, 2, diceThrower));
+    }
 }
