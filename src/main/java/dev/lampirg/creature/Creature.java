@@ -19,6 +19,7 @@ public abstract class Creature {
     private DamageRange damageRange;
 
     public Creature(int maxHealth, int defense, int attack, int lowestDamage, int highestDamage, DiceThrower diceThrower) {
+        // TODO: replace with aspect
         validateArguments(maxHealth, defense, attack);
         health = new Health(maxHealth, maxHealth);
         isAlive = true;
